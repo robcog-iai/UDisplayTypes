@@ -13,7 +13,7 @@ void UVisManager::Init(FString DefaultNamespace)
 		UE_LOG(LogTemp, Warning, TEXT("[%s]: GetWorld returned, NULL."), *FString(__FUNCTION__));
 		return;
 	}
-
+	
 	// Setup IDMap
 	IdToActorMap = FTags::GetKeyValuesToActor(GetWorld(), "SemLog", "Id");
 

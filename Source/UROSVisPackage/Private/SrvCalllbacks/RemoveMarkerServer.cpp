@@ -19,7 +19,7 @@ TSharedPtr<FROSBridgeSrv::SrvResponse> FROSRemoveMarkerServer::Callback(TSharedP
 
 	bool bSuccess = false;
 	//if(Controller->IdToMarkerMap.RemoveAndCopyValue(RemoveRequest->GetMarkerId(), VisualMarkerActor))
-	if (Controller->IdToActorMap.RemoveAndCopyValue(RemoveRequest->GetMarkerId(), VisualMarkerActor))
+	if (Controller->IdToActorMap.RemoveAndCopyValue(RemoveRequest->GetMarkerId(), VisualMarkerActor) && VisualMarkerActor)
 	{
 		FGraphEventRef Task = FFunctionGraphTask::CreateAndDispatchWhenReady([&]()
 		{

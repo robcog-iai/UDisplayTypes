@@ -22,8 +22,8 @@ public:
 
 	void Init(FString DefaultNamespace) override;
 
+	UPROPERTY()
 	TMap<FString, AActor*> IdToActorMap;
 private:
-	UWorld * World;
 	FString Namespace;
 };

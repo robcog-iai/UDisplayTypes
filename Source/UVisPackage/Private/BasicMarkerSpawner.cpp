@@ -26,14 +26,18 @@ AVisualMarker* UBasicMarkerSpawner::SpawnVisualMarker(EBasicMarkerType Type, FVe
 	}
 
 	AVisualMarker* BaseActor;
+	
 	UWorld* World = GetWorld();
+
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.bNoFail = true;
+	SpawnParams.OverrideLevel = GetWorld()->GetCurrentLevel();
+	
 	if (IsInGameThread())
 	{
 		// Spawn Marker Base Actor
-		//BaseActor = World->SpawnActor<AVisualMarker>(SpawnParams);
-		BaseActor = World->SpawnActor<AVisualMarker>();
+		BaseActor = World->SpawnActor<AVisualMarker>(SpawnParams);
+		//BaseActor = World->SpawnActor<AVisualMarker>();
 		BaseActor->AddActorWorldTransform(FTransform(Rotation, Location));
 	}
 	else
@@ -91,12 +95,7 @@ bool UBasicMarkerSpawner::AddVisualToActorInternal(AActor& Actor, EBasicMarkerTy
 		return AddPointVisualToActor(Actor, Location, Rotation, Color);
 	}
 
-	UStaticMeshComponent* MeshComponent;
-
-	// Attach StaticMeshComponent
-	MeshComponent = NewObject<UStaticMeshComponent>(&Actor);
-	MeshComponent->AttachToComponent(Actor.GetRootComponent(),
-		FAttachmentTransformRules(EAttachmentRule::KeepWorld, false));
+	UStaticMeshComponent* MeshComponent = NewObject<UStaticMeshComponent>(&Actor);
 
 	// Asign Mesh to Component
 	UStaticMesh* Mesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), nullptr, **MapTypeToMeshPath.Find(Type)));
@@ -110,6 +109,7 @@ bool UBasicMarkerSpawner::AddVisualToActorInternal(AActor& Actor, EBasicMarkerTy
 	UMaterialInstanceDynamic* DynMaterial = UMaterialInstanceDynamic::Create(Material, this);
 	DynMaterial->SetVectorParameterValue("Color", Color);
 	MeshComponent->SetMaterial(0, DynMaterial);
+	MeshComponent->SetupAttachment(Actor.GetRootComponent());
 	MeshComponent->SetWorldLocationAndRotation(Location, Rotation);
 	MeshComponent->RegisterComponent();
 	return true;
@@ -127,7 +127,7 @@ bool UBasicMarkerSpawner::AddPointVisualToActor(AActor& Actor, FVector Location,
 	Colors.Add(Color);
 
 	// Pass data to PCR
-	PointCloudRendererComponent->SetDynamicProperties(1, 1, 1);
+	PointCloudRendererComponent->SetDynamicProperties(1, 1, 10);
 
 	PointCloudRendererComponent->SetInputAndConvert1(Points, Colors);
 

@@ -15,9 +15,7 @@ TSharedPtr<FROSBridgeSrv::SrvResponse> FROSDisplayBasicMarkerServer::Callback(
 {
 	TSharedPtr<FROSDisplayBasicMarkerSrv::Request> DisplayMarkerRequest =
 		StaticCastSharedPtr<FROSDisplayBasicMarkerSrv::Request>(Request);
-
-	UBasicMarkerSpawner* MarkerSpawner;
-
+	
 	//Run on Gamethread
 	FGraphEventRef Task = FFunctionGraphTask::CreateAndDispatchWhenReady([&]()
 	{

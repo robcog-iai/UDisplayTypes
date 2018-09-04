@@ -4,6 +4,7 @@
 #include "ROSBridgeSrvServer.h"
 #include "DisplayBasicMarker.h"
 #include "UVisManager.h"
+#include "BasicMarkerSpawner.h"
 
 
 class FROSDisplayBasicMarkerServer final : public FROSBridgeSrvServer
@@ -14,6 +15,7 @@ private:
 	FThreadSafeBool ServiceSuccess;
 
 	UVisManager* Controller;
+	UBasicMarkerSpawner* MarkerSpawner;
 	
 public:
 
